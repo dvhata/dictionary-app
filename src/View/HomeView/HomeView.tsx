@@ -6,11 +6,13 @@ import SearchView from "./SearchView";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import QuizView from "../QuizView/QuizView";
 import WordMeaning from "../WordMeaning/WordMeaningView";
-import Tab from "../../../Tab";
+import Tab from "../../../TabNavigator";
 import { StackScreenProps } from "@react-navigation/stack";
+import TabNavigator from "../../../TabNavigator";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 function HomeView(props: PropsWithChildren<HomeViewProps>) {
-  const {navigation} = props;
+  const { navigation } = props;
   const [wordSearch, setWordSearch] = React.useState();
   const [showSearchView, setShowSearchView] = React.useState<boolean>(false);
 
@@ -26,29 +28,28 @@ function HomeView(props: PropsWithChildren<HomeViewProps>) {
   }, []);
 
   return (
-    <View style={styles.container}>
-      <View style={styles.searchContainer}>
-        <View>
-          <View style={styles.header}>
-            <Text style={styles.textHeader}>Từ điển thông minh</Text>
-            <Text style={styles.textSubHeader}>Tra cả thế giới</Text>
-            <View>
-              <Text></Text>
-              <TextInput
-                onChangeText={handleSearch}
-                placeholderTextColor="black"
-                placeholder="Search here..."
-                style={styles.textInput}
-              />
-              {showSearchView && <SearchView onPress={handleGotoMeaning} />}
+    <SafeAreaView style={{ flex: 1 }}>
+      <View style={styles.container}>
+        <View style={styles.searchContainer}>
+          <View>
+            <View style={styles.header}>
+              <Text style={styles.textHeader}>Từ điển thông minh</Text>
+              <Text style={styles.textSubHeader}>Tra cả thế giới</Text>
+              <View>
+                <Text></Text>
+                <TextInput
+                  onChangeText={handleSearch}
+                  placeholderTextColor="black"
+                  placeholder="Search here..."
+                  style={styles.textInput}
+                />
+                {showSearchView && <SearchView onPress={handleGotoMeaning} />}
+              </View>
             </View>
           </View>
         </View>
       </View>
-      <View style={styles.tabContainer}>
-        <Tab />
-      </View>
-    </View>
+    </SafeAreaView>
   );
 }
 

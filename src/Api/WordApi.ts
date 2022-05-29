@@ -13,6 +13,41 @@ class WordApi {
       .catch(function(error) {
         console.log(error)})
   };
+  search = (word?: string) => {
+    const url = BASE_URL + "search/" + word;
+    console.log(url);
+    return axios
+      .get(
+        url,
+      )
+      .then((response) => response.data)
+      .catch(function(error) {
+        console.log(error)})
+  };
+
+  symnonym = (word?: string) => {
+    const url = "https://tuna.thesaurus.com/pageData/" + word;
+    console.log(url);
+    return axios
+      .get(
+        url,
+      )
+      .then((response) => response.data)
+      .catch(function(error) {
+        console.log(error)})
+  };
+
+  recent = () => {
+    const url = BASE_URL + "recent";
+    console.log(url);
+    return axios
+      .get(
+        url,
+      )
+      .then((response) => response.data)
+      .catch(function(error) {
+        console.log(error)})
+  };
 
 //   districtRegist = (
 //     token?: string,

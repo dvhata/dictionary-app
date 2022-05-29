@@ -2,13 +2,45 @@ import { StackScreenProps } from "@react-navigation/stack";
 import React, { PropsWithChildren } from "react";
 import { View, Text, StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
+import wordApi from "../../Api/WordApi";
+import { Synonym } from "../../Models/Thesaurus/Synonym";
+import { Thesaurus } from "../../Models/Thesaurus/Thesaurus";
+import { Word } from "../../Models/Word/Word";
 
 export default function WordMeaningScreen(
   props: PropsWithChildren<WordMeaningViewProps>
 ) {
   const { route } = props;
-
   const { text } = route.params;
+  const [trans, setTrans] = React.useState<Word>();
+  const [synonyms, setSynonyms] = React.useState<Synonym[]>();
+  const [antonyms, setAntonyms] = React.useState<Synonym[]>();
+
+  React.useEffect(() => {
+    const fetchData = () => {
+      wordApi
+        .search(text)
+        .then((response: any) => {
+          setTrans(response.at(0));
+        })
+        .catch((error) => {
+          console.log("Api call error");
+          alert(error.message);
+        });
+      wordApi
+        .symnonym(text)
+        .then((response: any) => {
+          setSynonyms(response.data.definitionData.definitions.at(0).synonyms);
+          setAntonyms(response.data.definitionData.definitions.at(0).antonyms);
+        })
+        .catch((error) => {
+          console.log("Api call error");
+          alert(error.message);
+        });
+    };
+    fetchData();
+  }, []);
+  const meaning = trans?.meaning?.split('{"/n"}');
 
   return (
     <View style={styles.container}>
@@ -26,17 +58,52 @@ export default function WordMeaningScreen(
             tvParallaxProperties={undefined}
           />
         </View>
-        <View style={styles.boxMeaning}>
-          <Text>Phien am </Text>
-          <Icon
-            size={10}
-            style={styles.iconPlay}
-            raised
-            name="play"
-            type="font-awesome"
-            onPress={() => console.log("hello")}
-            tvParallaxProperties={undefined}
-          />
+        <View style={styles.boxTrans}>
+          <View style={styles.boxPronunciation}>
+            <Text>{trans?.pronunciation}</Text>
+            <Icon
+              size={10}
+              style={styles.iconPlay}
+              raised
+              name="play"
+              type="font-awesome"
+              onPress={() => console.log("hello")}
+              tvParallaxProperties={undefined}
+            />
+          </View>
+
+          <View>
+            <Text style={styles.tagMeaning}>#meaning</Text>
+            {meaning?.map((item) => {
+              return (
+                <>
+                  <Text key={item}>{item}</Text>
+                </>
+              );
+            })}
+          </View>
+          <Text style={styles.tagMeaning}>#symnonym</Text>
+          <View style={styles.containerSynonyms}>
+            {synonyms &&
+              synonyms.map((item) => {
+                return (
+                  <View>
+                    <Text key={item.term}>{item.term + ", "}</Text>
+                  </View>
+                );
+              })}
+          </View>
+        </View>
+        <Text style={styles.tagMeaning}>#antonyms</Text>
+        <View style={styles.containerSynonyms}>
+          {antonyms &&
+            antonyms.map((item) => {
+              return (
+                <View>
+                  <Text key={item.term}>{item.term + ", "}</Text>
+                </View>
+              );
+            })}
         </View>
       </View>
     </View>
@@ -72,6 +139,7 @@ const styles = StyleSheet.create({
     borderColor: "grey",
   },
   word: {
+    color: "#393318",
     marginTop: 20,
     marginBottom: 5,
     fontSize: 20,
@@ -80,11 +148,34 @@ const styles = StyleSheet.create({
   iconPlay: {
     // marginLeft: 10,
   },
-  boxMeaning: {
+  boxTrans: {
+    marginTop: 10,
+    flexDirection: "column",
+  },
+  boxPronunciation: {
     marginTop: 10,
     flexDirection: "row",
   },
   iconHeart: {
     marginLeft: 10,
+  },
+  tagMeaning: {
+    backgroundColor: "#f7d749",
+    width: 120,
+    padding: 10,
+
+    marginTop: 5,
+    borderRadius: 5,
+    fontWeight: "bold",
+  },
+  containerSynonyms: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    width: 300,
+    padding: 10,
+    marginBottom: 5,
+    marginTop: 5,
+    borderRadius: 5,
+    fontWeight: "bold",
   },
 });

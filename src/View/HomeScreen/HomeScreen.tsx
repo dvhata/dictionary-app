@@ -5,21 +5,17 @@ import wordApi from "../../Api/WordApi";
 import { Word } from "../../Models/Word/Word";
 import SearchComponent from "./SearchComponent";
 
-
-
 export default function HomeScreen(props: PropsWithChildren<HomeViewProps>) {
   const { navigation } = props;
   const [wordSearch, setWordSearch] = React.useState();
   const [wordSearchList, setWordSearchList] = React.useState<Word[]>();
-  const [showSearchView, setShowSearchView] = React.useState<boolean>(false);
+  const [wordRecentList, setWordRecentList] = React.useState<Word[]>();
 
   const handleSearch = React.useCallback((text) => {
     setWordSearch(text);
-    text ? setShowSearchView(true) : setShowSearchView(false);
   }, []);
 
   const handleGotoMeaning = React.useCallback((value: string) => {
-    console.log
     navigation.navigate("WordMeaning", {
       text: value,
     });
@@ -36,37 +32,52 @@ export default function HomeScreen(props: PropsWithChildren<HomeViewProps>) {
           console.log("Api call error");
           alert(error.message);
         });
+      wordApi
+        .recent()
+        .then((response: any) => {
+          setWordRecentList(response);
+
+        })
+        .catch((error) => {
+          console.log("Api call error");
+          alert(error.message);
+        });
     };
     fetchData();
   }, [wordSearch]);
 
-
   return (
-      <View style={styles.container}>
-        <View style={styles.searchContainer}>
-          <View>
-            <View style={styles.header}>
-              <Text style={styles.textHeader}>Từ điển thông minh</Text>
-              <Text style={styles.textSubHeader}>Tra cả thế giới</Text>
-              <View>
-                <Text></Text>
-                <TextInput
-                  onChangeText={handleSearch}
-                  placeholderTextColor="black"
-                  placeholder="Search here..."
-                  style={styles.textInput}
+    <View style={styles.container}>
+      <View style={styles.searchContainer}>
+        <View>
+          <View style={styles.header}>
+            <Text style={styles.textHeader}>Từ điển thông minh</Text>
+            <Text style={styles.textSubHeader}>Tra cả thế giới</Text>
+            <View>
+              <Text></Text>
+              <TextInput
+                onChangeText={handleSearch}
+                placeholderTextColor="black"
+                placeholder="Search here..."
+                style={styles.textInput}
+              />
+              {wordRecentList && wordSearchList && (
+                <SearchComponent
+                  textInput={wordSearch}
+                  wordSearchList={wordSearchList}
+                  wordRecentList={wordRecentList}
+                  onPress={handleGotoMeaning}
                 />
-                {showSearchView && wordSearchList && <SearchComponent  data={wordSearchList} onPress={handleGotoMeaning} />}
-              </View>
+              )}
             </View>
           </View>
         </View>
       </View>
+    </View>
   );
 }
 
 export interface HomeViewProps extends StackScreenProps<any> {}
-
 
 const styles = StyleSheet.create({
   container: {
@@ -114,7 +125,7 @@ const styles = StyleSheet.create({
     backgroundColor: "white",
     height: 50,
     width: 240,
-    padding:10,
-    fontSize:14
+    padding: 10,
+    fontSize: 14,
   },
 });

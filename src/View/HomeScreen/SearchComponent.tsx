@@ -18,16 +18,18 @@ const baseUrl = "192.168.0.111:3000/words/";
 export default function SearchComponent(
   props: PropsWithChildren<SearchComponentProps>
 ) {
-  const { onPress, data } = props;
-  
+  const { textInput, onPress, wordSearchList, wordRecentList } = props;
 
   return (
     <View>
       <FlatList
         style={styles.searchContainer}
-        data={data}
+        data={textInput? wordSearchList : wordRecentList}
         renderItem={({ item }) => (
-          <TouchableOpacity key={item.word} onPress={() => onPress}>
+          <TouchableOpacity
+            key={item.word}
+            onPress={() => onPress(item.word as string)}
+          >
             <View style={styles.wordListContainer}>
               <Text style={styles.wordListWord}> {item.word} </Text>
               <Text> {item?.pronunciation?.slice(1, 20)} </Text>
@@ -42,8 +44,10 @@ export default function SearchComponent(
 }
 
 export interface SearchComponentProps {
+  textInput?: string;
   onPress: (value: string) => void;
-  data: Word[];
+  wordSearchList?: Word[];
+  wordRecentList?: Word[];
 }
 
 const styles = StyleSheet.create({
@@ -61,6 +65,6 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
   },
   wordListWord: {
-    fontWeight: "bold"
-  }
+    fontWeight: "bold",
+  },
 });

@@ -1,36 +1,20 @@
 import { StyleSheet, Text, View } from "react-native";
 import React from "react";
-import HomeView from "./src/View/HomeView/HomeView";
-import Tab from "./TabNavigator";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import WordMeaningView from "./src/View/WordMeaning/WordMeaningView";
 import TabNavigator from "./TabNavigator";
-import { SafeAreaProvider } from "react-native-safe-area-context";
+import WordMeaningScreen from "./src/View/WordMeaningScreen/WordMeaningScreen";
 
-const {Navigator, Screen} = createNativeStackNavigator();
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   return (
-    // <SafeAreaProvider>
-      <NavigationContainer>
-        {/* <TabNavigator /> */}
-        <Navigator
-          initialRouteName="HomeView"
-          screenOptions={{
-            headerShown: false,
-          }}
-        >
-          {/* <Screen name="TabNavigator" component={TabNavigator} /> */}
-          <Screen name="HomeView">
-            {() => (
-              <TabNavigator />
-            )}
-          </Screen>
-          <Screen name="WordMeaningView" component={WordMeaningView} />
-        </Navigator>
-      </NavigationContainer>
-    // </SafeAreaProvider>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Dictionary Plus" component={TabNavigator} />
+        <Stack.Screen name="WordMeaning" component={WordMeaningScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 

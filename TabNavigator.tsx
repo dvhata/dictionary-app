@@ -1,49 +1,26 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { Text} from "react-native";
+import { Text } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
 import { StyleSheet } from "react-native";
-import HistoryView from "./src/View/HistoryView/HistoryView";
-import HomeView from "./src/View/HomeView/HomeView";
+import HomeScreen from "./src/View/HomeScreen/HomeScreen";
+import HistoryScreen from "./src/View/HistoryScreen/HistoryScreen";
+import QuizScreen from "./src/View/QuizScreen/QuizScreen";
+import SettingScreen from "./src/View/SettingScreen/SettingScreen";
 
-const {Navigator, Screen} = createBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 
 export default function TabNavigator() {
   return (
-    <Navigator
-      initialRouteName="HomeView"
-      tabBar={()=> null}
-      screenOptions={{
-        headerShown: false,
-      }}
-    >
-      <Screen name="Home" component={HomeView} options={{
-        tabBarLabel: ({focused: boolean}) => 
-          (<Text  style={styles.test}>Home</Text>)
-        ,
-      }}/>
-      <Screen name="HistoryView" component={HistoryView} options={{
-        tabBarLabel: ({focused: boolean}) => 
-        (<Text>HistoryView</Text>),
-      }}/>
-    </Navigator>
+    <Tab.Navigator screenOptions={{ headerShown: false }}>
+      <Tab.Screen name="HomeView" component={HomeScreen} />
+      <Tab.Screen name="History" component={HistoryScreen} />
+      <Tab.Screen name="Quiz" component={QuizScreen} />
+      <Tab.Screen name="Setting" component={SettingScreen} />
+    </Tab.Navigator>
   );
 }
 
 const styles = StyleSheet.create({
-  tab: {
-    flex: 1,
-    flexDirection: "row",
-    backgroundColor: "#f9f9f9",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 0,
-  },
-  buttonTab: {
-    color: "red",
-  },
-  test: {
-    color: "red",
-    backgroundColor: "blue"
-  },
+ 
 });

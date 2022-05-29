@@ -1,19 +1,16 @@
-import { NavigationContainer } from "@react-navigation/native";
+import { StackScreenProps } from "@react-navigation/stack";
 import React, { PropsWithChildren } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
-import { Stack } from "react-native-router-flux";
-import SearchView from "./SearchView";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import QuizView from "../QuizView/QuizView";
-import WordMeaning from "../WordMeaning/WordMeaningView";
-import Tab from "../../../TabNavigator";
-import { StackScreenProps } from "@react-navigation/stack";
-import TabNavigator from "../../../TabNavigator";
-import { SafeAreaView } from "react-native-safe-area-context";
+import wordApi from "../../Api/WordApi";
+import { Word } from "../../Models/Word/Word";
+import SearchComponent from "./SearchComponent";
 
-function HomeView(props: PropsWithChildren<HomeViewProps>) {
+
+
+export default function HomeScreen(props: PropsWithChildren<HomeViewProps>) {
   const { navigation } = props;
   const [wordSearch, setWordSearch] = React.useState();
+  const [wordSearchList, setWordSearchList] = React.useState<Word[]>();
   const [showSearchView, setShowSearchView] = React.useState<boolean>(false);
 
   const handleSearch = React.useCallback((text) => {
@@ -22,13 +19,29 @@ function HomeView(props: PropsWithChildren<HomeViewProps>) {
   }, []);
 
   const handleGotoMeaning = React.useCallback((value: string) => {
-    navigation.navigate("WordMeaningView", {
+    console.log
+    navigation.navigate("WordMeaning", {
       text: value,
     });
   }, []);
 
+  React.useEffect(() => {
+    const fetchData = () => {
+      wordApi
+        .lookUp(wordSearch)
+        .then((response: any) => {
+          setWordSearchList(response);
+        })
+        .catch((error) => {
+          console.log("Api call error");
+          alert(error.message);
+        });
+    };
+    fetchData();
+  }, [wordSearch]);
+
+
   return (
-    <SafeAreaView style={{ flex: 1 }}>
       <View style={styles.container}>
         <View style={styles.searchContainer}>
           <View>
@@ -43,21 +56,17 @@ function HomeView(props: PropsWithChildren<HomeViewProps>) {
                   placeholder="Search here..."
                   style={styles.textInput}
                 />
-                {showSearchView && <SearchView onPress={handleGotoMeaning} />}
+                {showSearchView && wordSearchList && <SearchComponent  data={wordSearchList} onPress={handleGotoMeaning} />}
               </View>
             </View>
           </View>
         </View>
       </View>
-    </SafeAreaView>
   );
 }
 
 export interface HomeViewProps extends StackScreenProps<any> {}
 
-HomeView.displayName = "";
-
-export default HomeView;
 
 const styles = StyleSheet.create({
   container: {
@@ -68,7 +77,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   searchContainer: {
-    marginTop: 150,
+    marginTop: 50,
     marginBottom: 50,
   },
   tabContainer: {
@@ -80,7 +89,6 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: "#f9f9f9",
     alignItems: "center",
-    // justifyContent: "center",
     borderRadius: 15,
     padding: 20,
   },
@@ -98,15 +106,15 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f9f9",
   },
   searchBox: {
-    // marginTop: 20,
-    // marginBottom: 30,
     backgroundColor: "#f9f9f9",
     height: "300",
     width: "1000",
   },
   textInput: {
     backgroundColor: "white",
-    height: 40,
-    width: 200,
+    height: 50,
+    width: 240,
+    padding:10,
+    fontSize:14
   },
 });

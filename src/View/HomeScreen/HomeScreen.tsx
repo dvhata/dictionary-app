@@ -51,8 +51,8 @@ export default function HomeScreen(props: PropsWithChildren<HomeViewProps>) {
       <View style={styles.searchContainer}>
         <View>
           <View style={styles.header}>
-            <Text style={styles.textHeader}>Từ điển thông minh</Text>
-            <Text style={styles.textSubHeader}>Tra cả thế giới</Text>
+            <Text style={styles.textHeader}>Smart Dictionary</Text>
+            <Text style={styles.textSubHeader}>Eng-Viet</Text>
             <View>
               <Text></Text>
               <TextInput
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     flexDirection: "column",
   },
   searchContainer: {
-    marginTop: 50,
+    marginTop: 80,
     marginBottom: 50,
   },
   tabContainer: {
@@ -98,18 +98,22 @@ const styles = StyleSheet.create({
   },
   header: {
     flex: 1,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#414445",
     alignItems: "center",
     borderRadius: 15,
     padding: 20,
   },
   textHeader: {
     marginTop: 50,
-    fontSize: 20,
+    fontSize: 25,
     fontWeight: "bold",
+    color: "white",
+    
   },
   textSubHeader: {
-    fontSize: 14,
+    fontSize: 15,
+    fontWeight: "bold",
+    color: "white",
   },
   dropdown: {
     marginTop: 20,

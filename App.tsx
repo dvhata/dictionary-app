@@ -10,7 +10,7 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{ headerShown: false }  }>
         <Stack.Screen name="Dictionary Plus" component={TabNavigator} />
         <Stack.Screen name="WordMeaning" component={WordMeaningScreen} />
       </Stack.Navigator>

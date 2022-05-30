@@ -1,20 +1,35 @@
 import { StackScreenProps } from "@react-navigation/stack";
+import * as Speech from "expo-speech";
 import React, { PropsWithChildren } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import { Icon } from "react-native-elements";
 import wordApi from "../../Api/WordApi";
 import { Synonym } from "../../Models/Thesaurus/Synonym";
-import { Thesaurus } from "../../Models/Thesaurus/Thesaurus";
 import { Word } from "../../Models/Word/Word";
+import HomeScreen from "../HomeScreen/HomeScreen";
 
 export default function WordMeaningScreen(
   props: PropsWithChildren<WordMeaningViewProps>
 ) {
-  const { route } = props;
+  const { route, navigation } = props;
   const { text } = route.params;
   const [trans, setTrans] = React.useState<Word>();
   const [synonyms, setSynonyms] = React.useState<Synonym[]>();
   const [antonyms, setAntonyms] = React.useState<Synonym[]>();
+
+  const handleTextToSpeech = React.useCallback(() => {
+    Speech.speak(text);
+  }, []);
+
+  const handleBackToSearchScreen = React.useCallback(() => {
+    navigation.goBack();
+  }, []);
 
   React.useEffect(() => {
     const fetchData = () => {
@@ -46,64 +61,81 @@ export default function WordMeaningScreen(
     <View style={styles.container}>
       <View style={styles.boxContainer}>
         <View style={styles.boxWord}>
-          <Text style={styles.word}>{text}</Text>
-          <Icon
-            color="red"
-            size={16}
-            style={styles.iconHeart}
-            raised
-            name="heart"
-            type="font-awesome"
-            onPress={() => console.log("hello")}
-            tvParallaxProperties={undefined}
-          />
+          <View>
+            <Text style={styles.word}>{text}</Text>
+          </View>
+          <View>
+            <Icon
+              size={16}
+              raised
+              name="play"
+              type="font-awesome"
+              onPress={handleTextToSpeech}
+              tvParallaxProperties={undefined}
+            />
+          </View>
+          <View>
+            <Icon
+              color="black"
+              size={16}
+              raised
+              name="heart"
+              type="font-awesome"
+              onPress={handleTextToSpeech}
+              tvParallaxProperties={undefined}
+            />
+          </View>
         </View>
         <View style={styles.boxTrans}>
           <View style={styles.boxPronunciation}>
             <Text>{trans?.pronunciation}</Text>
+          </View>
+
+          <ScrollView style={styles.scrollView}>
+            <View>
+              <Text style={styles.tagMeaning}>#meaning</Text>
+              {meaning?.map((item) => {
+                return (
+                  <>
+                    <Text key={item}>{item}</Text>
+                  </>
+                );
+              })}
+            </View>
+            <Text style={styles.tagMeaning}>#symnonym</Text>
+            <View style={styles.containerSynonyms}>
+              {synonyms &&
+                synonyms.map((item) => {
+                  return (
+                    <View>
+                      <Text key={item.term}>{"| " + item.term + " "}</Text>
+                    </View>
+                  );
+                })}
+            </View>
+
+            <Text style={styles.tagMeaning}>#antonyms</Text>
+            <View style={styles.containerSynonyms}>
+              {antonyms &&
+                antonyms.map((item) => {
+                  return (
+                    <View>
+                      <Text key={item.term}>{"| " + item.term + " "}</Text>
+                    </View>
+                  );
+                })}
+            </View>
+          </ScrollView>
+          <View style={{ flex: 1, alignItems: "center" }}>
             <Icon
-              size={10}
-              style={styles.iconPlay}
+              size={35}
               raised
-              name="play"
-              type="font-awesome"
-              onPress={() => console.log("hello")}
+              name="arrow-back-circle-outline"
+              type="ionicon"
+              onPress={handleBackToSearchScreen}
               tvParallaxProperties={undefined}
             />
           </View>
-
-          <View>
-            <Text style={styles.tagMeaning}>#meaning</Text>
-            {meaning?.map((item) => {
-              return (
-                <>
-                  <Text key={item}>{item}</Text>
-                </>
-              );
-            })}
-          </View>
-          <Text style={styles.tagMeaning}>#symnonym</Text>
-          <View style={styles.containerSynonyms}>
-            {synonyms &&
-              synonyms.map((item) => {
-                return (
-                  <View>
-                    <Text key={item.term}>{item.term + ", "}</Text>
-                  </View>
-                );
-              })}
-          </View>
-        </View>
-        <Text style={styles.tagMeaning}>#antonyms</Text>
-        <View style={styles.containerSynonyms}>
-          {antonyms &&
-            antonyms.map((item) => {
-              return (
-                <View>
-                  <Text key={item.term}>{item.term + ", "}</Text>
-                </View>
-              );
-            })}
         </View>
       </View>
     </View>
@@ -140,13 +172,9 @@ const styles = StyleSheet.create({
   },
   word: {
     color: "#393318",
-    marginTop: 20,
     marginBottom: 5,
-    fontSize: 20,
+    fontSize: 30,
     fontWeight: "bold",
-  },
-  iconPlay: {
-    // marginLeft: 10,
   },
   boxTrans: {
     marginTop: 10,
@@ -154,25 +182,24 @@ const styles = StyleSheet.create({
   },
   boxPronunciation: {
     marginTop: 10,
-    flexDirection: "row",
+    marginBottom: 10,
+    flexDirection: "column",
   },
-  iconHeart: {
-    marginLeft: 10,
+  scrollView: {
+    height: 550,
   },
   tagMeaning: {
     backgroundColor: "#f7d749",
     width: 120,
     padding: 10,
-
     marginTop: 5,
     borderRadius: 5,
     fontWeight: "bold",
+    marginBottom: 5,
   },
   containerSynonyms: {
     flexDirection: "row",
     flexWrap: "wrap",
-    width: 300,
-    padding: 10,
     marginBottom: 5,
     marginTop: 5,
     borderRadius: 5,

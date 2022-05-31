@@ -3,4 +3,5 @@ export class Word {
     pronunciation?: string
     subMeaning?: string
     meaning?: string
+    favorite?: number = 0;
 }

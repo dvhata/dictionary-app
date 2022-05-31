@@ -49,55 +49,45 @@ class WordApi {
         console.log(error)})
   };
 
-//   districtRegist = (
-//     token?: string,
-//     permission?: string,
-//     name?: string,
-//     id?: string
-//   ) => {
-//     const url = "/district";
-//     return axiosClient
-//       .post(
-//         url,
-//         { permission, name, id },
-//         {
-//           headers: { Authorization: "Bearer " + token },
-//         }
-//       )
-//       .then((response) => response.data);
-//   };
+  favorite = () => {
+    const url = BASE_URL + "favorite";
+    console.log(url);
+    return axios
+      .get(
+        url,
+      )
+      .then((response) => response.data)
+      .catch(function(error) {
+        console.log(error)})
+  };
 
-//   districtDelete = (token?: string, id?: any) => {
-//     const url = "/district/" + id;
-//     return axiosClient
-//       .delete(url, {
-//         headers: { Authorization: "Bearer " + token },
-//       })
-//       .then((response) => response.data);
-//   };
+  like = (word?: string) => {
+    const url = BASE_URL + "like/" + word;
+    console.log(url);
+    return axios
+      .put(
+        url, {
+          word
+        }
+      )
+      .then((response) => response.data)
+      .catch(function(error) {
+        console.log(error)})
+  };
 
-//   districtUpdate = (
-//     token?: string,
-//     permissionModal?: any,
-//     permission?: any,
-//     name?: string,
-//     id?: string
-//   ) => {
-//     const url = "/district/" + permissionModal;
-//     return axiosClient
-//       .put(
-//         url,
-//         {
-//           permission,
-//           name,
-//           id,
-//         },
-//         {
-//           headers: { Authorization: "Bearer " + token },
-//         }
-//       )
-//       .then((response) => response.data);
-//   };
+  add = (word?: string, pronunciation?: string, meaning?:string) => {
+    const url = BASE_URL + "add/";
+    console.log(url);
+    return axios
+      .post(
+        url, {
+          word, pronunciation, meaning
+        }
+      )
+      .then((response) => response.data)
+      .catch(function(error) {
+        console.log(error)})
+  };
 }
 
 const wordApi = new WordApi();

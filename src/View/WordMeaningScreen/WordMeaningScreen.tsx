@@ -4,7 +4,7 @@ import React, { PropsWithChildren } from "react";
 import {
   ScrollView,
   StyleSheet,
-  Text,
+  Text,                          
   TouchableOpacity,
   View,
 } from "react-native";
@@ -12,7 +12,6 @@ import { Icon } from "react-native-elements";
 import wordApi from "../../Api/WordApi";
 import { Synonym } from "../../Models/Thesaurus/Synonym";
 import { Word } from "../../Models/Word/Word";
-import HomeScreen from "../HomeScreen/HomeScreen";
 
 export default function WordMeaningScreen(
   props: PropsWithChildren<WordMeaningViewProps>
@@ -29,6 +28,18 @@ export default function WordMeaningScreen(
 
   const handleBackToSearchScreen = React.useCallback(() => {
     navigation.goBack();
+  }, []);
+
+  const handleAddToFavorite = React.useCallback((text) => {
+    wordApi
+      .like(text)
+      .then((response: any) => {
+        alert( "You liked" + `"${response}"`);
+      })
+      .catch((error) => {
+        console.log("Api call error");
+        alert(error.message);
+      });
   }, []);
 
   React.useEffect(() => {
@@ -81,7 +92,7 @@ export default function WordMeaningScreen(
               raised
               name="heart"
               type="font-awesome"
-              onPress={handleTextToSpeech}
+              onPress={() => handleAddToFavorite(text)}
               tvParallaxProperties={undefined}
             />
           </View>

@@ -4,6 +4,7 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import TabNavigator from "./TabNavigator";
 import WordMeaningScreen from "./src/View/WordMeaningScreen/WordMeaningScreen";
+import EditScreen from "./src/View/EditScreen/EditScreen";
 
 const Stack = createNativeStackNavigator();
 
@@ -13,6 +14,7 @@ export default function App() {
       <Stack.Navigator screenOptions={{ headerShown: false }  }>
         <Stack.Screen name="Dictionary Plus" component={TabNavigator} />
         <Stack.Screen name="WordMeaning" component={WordMeaningScreen} />
+        <Stack.Screen name="Edit" component={EditScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );

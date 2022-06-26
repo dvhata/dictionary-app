@@ -62,7 +62,7 @@ export default function TabNavigator() {
           ),
         }}
       />
-      <Tab.Screen
+      {/* <Tab.Screen
         name="Quiz"
         component={QuizScreen}
         options={{
@@ -70,7 +70,7 @@ export default function TabNavigator() {
             <Ionicons size={size} name="flower-outline" color={color} />
           ),
         }}
-      />
+      /> */}
     </Tab.Navigator>
   );
 }

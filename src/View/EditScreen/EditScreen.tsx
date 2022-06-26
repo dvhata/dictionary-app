@@ -1,4 +1,5 @@
-import React from "react";
+import { StackScreenProps } from "@react-navigation/stack";
+import React, { PropsWithChildren } from "react";
 import {
   View,
   Text,
@@ -11,8 +12,11 @@ import {
 } from "react-native";
 // import { RNToasty } from "react-native-toasty";
 import wordApi from "../../Api/WordApi";
+import { Word } from "../../Models/Word/Word";
 
-export default function AddScreen() {
+export default function UpdateScreen(
+  props: PropsWithChildren<UpdateScreenProps>
+) {
   const speeling_data = [
     "'",
     "ɪ",
@@ -60,77 +64,124 @@ export default function AddScreen() {
     "j",
   ];
 
-  const [modalVisible, setModalVisible] = React.useState(false);
-  const [word, setWord] = React.useState<string>();
-  const [tempPronunciation, setTempPronunciation] = React.useState<string>("");
-  const [pronunciation, setPronunciation] = React.useState<string>();
-  // const [oldPronunciation, setOldPronunciation] = React.useState<string>();
-  const [meaning1, setMeaning1] = React.useState<string>("");
-  const [meaning2, setMeaning2] = React.useState<string>("");
-  const [meaning3, setMeaning3] = React.useState<string>("");
-  // const [meaning4, setMeaning4] = React.useState<string>("");
-  // const [meaning5, setMeaning5] = React.useState<string>("");
-  const [synonym, setSynonym] = React.useState<string>("");
-  const [antonyms, setAntonyms] = React.useState<string>("");
-  const split = '{"/n"}';
-  let meaningTotal: string;
+  const { route, navigation } = props;
+  const { text } = route.params;
 
-  const handleGetWord = React.useCallback((text) => {
-    setWord(text);
+  const [modalVisible, setModalVisible] = React.useState(false);
+  const [trans, setTrans] = React.useState<Word>();
+  const [wordUpdate, setWordUpdate] = React.useState<string>("");
+  const [tempPronunciationUpdate, setTempPronunciationUpdate] =
+    React.useState<string>("");
+  const [pronunciationUpdate, setPronunciationUpdate] =
+    React.useState<string>("");
+  const [synonymUpdate, setSynonymUpdate] = React.useState<string>("");
+  const [meaningTotalUpdate, setMeaningTotalUpdate] =
+    React.useState<string>("");
+  const [antonymsUpdate, setAntonymsUpdate] = React.useState<string>("");
+
+  const meaning = trans?.meaning ? trans?.meaning?.split('{"/n"}') : [""];
+  const split = '{"/n"}';
+
+  const [meaning1Update, setMeaning1Update] = React.useState<string>("");
+  const [meaning2Update, setMeaning2Update] = React.useState<string>("");
+  const [meaning3Update, setMeaning3Update] = React.useState<string>("");
+
+  const handleGetWordUpdate = React.useCallback((text) => {
+    setWordUpdate(text);
   }, []);
 
   const handleGetPronunciation = React.useCallback(
     (text, tempPronunciation) => {
-      setTempPronunciation(tempPronunciation + text);
-      setPronunciation("/" + tempPronunciation + "/");
+      setTempPronunciationUpdate(tempPronunciation + text);
+      setPronunciationUpdate("/" + tempPronunciation + "/");
     },
-    [tempPronunciation, pronunciation]
+    [tempPronunciationUpdate, pronunciationUpdate]
   );
 
   const handleResetPronunciation = React.useCallback(() => {
-    setTempPronunciation("");
-  }, [tempPronunciation]);
+    setTempPronunciationUpdate("");
+  }, [tempPronunciationUpdate]);
 
-  const handleGetMeaning1 = React.useCallback((text) => {
-    if (text) setMeaning1("-" + text);
+  const handleGetMeaning1Update = React.useCallback((text) => {
+    if (text) setMeaning1Update("-" + text);
   }, []);
 
-  const handleGetMeaning2 = React.useCallback((text) => {
-    if (text) setMeaning2(split + "-" + text);
+  const handleGetMeaning2Update = React.useCallback((text) => {
+    if (text) setMeaning2Update(split + "-" + text);
   }, []);
 
-  const handleGetMeaning3 = React.useCallback((text) => {
-    if (text) setMeaning3(split + "-" + text);
+  const handleGetMeaning3Update = React.useCallback((text) => {
+    if (text) setMeaning3Update(split + "-" + text);
   }, []);
 
   const handleGetSynonym = React.useCallback((text) => {
-    setSynonym(text);
+    setSynonymUpdate(text);
   }, []);
 
   const handleGetAntonyms = React.useCallback((text) => {
-    setAntonyms(text);
+    setAntonymsUpdate(text);
   }, []);
 
-  const handleAddWord = React.useCallback(
-    (word, pronunciation, meaningTotal, synonym, antonyms) => {
-      meaningTotal = meaning1 + meaning2 + meaning3;
+  const handleUpdateWord = React.useCallback(
+    (
+      oldWord,
+      wordUpdate,
+      pronunciationUpdate,
+      meaning1Update,
+      meaning2Update,
+      meaning3Update,
+      synonymUpdate,
+      antonymsUpdate
+    ) => {
+      setMeaningTotalUpdate(meaning1Update + meaning2Update + meaning3Update);
+      console.log(meaningTotalUpdate);
+
       wordApi
-        .add(
-          word,
-          pronunciation,
-          meaningTotal.slice(0, meaningTotal.length),
-          synonym,
-          antonyms
+        .update(
+          oldWord,
+          wordUpdate,
+          pronunciationUpdate,
+          meaningTotalUpdate,
+          synonymUpdate,
+          antonymsUpdate
         )
         .then((response: any) => {
-          alert("Add Word Successfully");
+          console.log("Update Word Successfully")
         })
         .catch((error) => {
           alert(error.message);
         });
     },
-    [word, pronunciation, meaning1, meaning2, meaning3]
+    [
+      text,
+      wordUpdate,
+      pronunciationUpdate,
+      meaning1Update,
+      meaning2Update,
+      meaning3Update,
+      synonymUpdate,
+      antonymsUpdate,
+    ]
   );
+
+  React.useEffect(() => {
+    const fetchData = () => {
+      wordApi
+        .search(text)
+        .then((response: any) => {
+          setTrans(response.at(0));
+        })
+        .catch((error) => {
+          console.log("Api call error");
+          alert(error.message);
+        });
+    };
+    fetchData();
+    setWordUpdate(text as string);
+    setPronunciationUpdate(trans?.pronunciation as string);
+    setSynonymUpdate(trans?.synonym as string);
+    setAntonymsUpdate(trans?.antonyms as string);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -141,72 +192,71 @@ export default function AddScreen() {
             fontWeight: "bold",
           }}
         >
-          Add New Word
+          Update Word: "{text}"
         </Text>
         <View style={styles.addContainer}>
-          <Text style={styles.addLabel}>-- Add word --</Text>
+          <Text style={styles.addLabel}>-- Update word --</Text>
           <TextInput
-            onChangeText={handleGetWord}
+            defaultValue={trans?.word}
+            onChangeText={handleGetWordUpdate}
             style={styles.transParagraphTextInput}
             placeholder="Enter word..."
             placeholderTextColor="grey"
           />
         </View>
         <View style={styles.addContainer}>
-          <Text style={styles.addLabel}>-- Add pronunciation --</Text>
-          {pronunciation && (
-            <TextInput
-              value={"/" + tempPronunciation + "/"}
-              style={styles.transParagraphTextInput}
-              placeholderTextColor="grey"
-            />
-          )}
+          <Text style={styles.addLabel}>-- Update pronunciation --</Text>
+          <TextInput
+            editable={false}
+            value={
+              tempPronunciationUpdate === ""
+                ? trans?.pronunciation
+                : "/" + tempPronunciationUpdate + "/"
+            }
+            style={styles.transParagraphTextInput}
+            placeholderTextColor="grey"
+          />
 
           <Pressable
             style={[styles.button, styles.buttonOpen]}
             onPress={() => setModalVisible(true)}
           >
-            <Text style={styles.textStyle}>Enter your pronunciation</Text>
+            <Text style={styles.textStyle}>Enter new pronunciation</Text>
           </Pressable>
         </View>
 
         <View style={styles.addContainer}>
-          <Text style={styles.addLabel}>-- Add meaning --</Text>
+          <Text style={styles.addLabel}>-- Update meaning --</Text>
+
           <TextInput
-            onChangeText={handleGetMeaning1}
+            defaultValue={meaning.at(0)}
+            onChangeText={handleGetMeaning1Update}
             style={styles.transParagraphTextInput}
             placeholder="Enter meaning 1..."
             placeholderTextColor="grey"
           />
+
           <TextInput
-            onChangeText={handleGetMeaning2}
+            defaultValue={meaning.at(1)}
+            onChangeText={handleGetMeaning2Update}
             style={styles.transParagraphTextInput}
-            placeholder="Enter meaning 2..."
+            placeholder="Enter meaning 1..."
             placeholderTextColor="grey"
           />
+
           <TextInput
-            onChangeText={handleGetMeaning3}
+            defaultValue={meaning.at(2)}
+            onChangeText={handleGetMeaning3Update}
             style={styles.transParagraphTextInput}
             placeholder="Enter meaning 3..."
             placeholderTextColor="grey"
           />
-          {/* <TextInput
-            onChangeText={handleGetMeaning4}
-            style={styles.transParagraphTextInput}
-            placeholder="Enter meaning 4..."
-            placeholderTextColor="grey"
-          /> */}
-          {/* <TextInput
-            onChangeText={handleGetMeaning5}
-            style={styles.transParagraphTextInput}
-            placeholder="Enter meaning 5..."
-            placeholderTextColor="grey"
-          /> */}
         </View>
 
         <View style={styles.addContainer}>
-          <Text style={styles.addLabel}>-- Add synonyms --</Text>
+          <Text style={styles.addLabel}>-- Update synonyms --</Text>
           <TextInput
+            defaultValue={trans?.synonym}
             onChangeText={handleGetSynonym}
             style={styles.transParagraphTextInput}
             placeholder="Enter synonyms..."
@@ -215,8 +265,9 @@ export default function AddScreen() {
         </View>
 
         <View style={styles.addContainer}>
-          <Text style={styles.addLabel}>-- Add antonyms --</Text>
+          <Text style={styles.addLabel}>-- Update antonyms --</Text>
           <TextInput
+            defaultValue={trans?.antonyms}
             onChangeText={handleGetAntonyms}
             style={styles.transParagraphTextInput}
             placeholder="Enter antonyms..."
@@ -227,17 +278,20 @@ export default function AddScreen() {
         <View style={{ alignItems: "center" }}>
           <TouchableOpacity
             onPress={() =>
-              handleAddWord(
-                word,
-                pronunciation,
-                meaningTotal,
-                synonym,
-                antonyms
+              handleUpdateWord(
+                text,
+                wordUpdate,
+                pronunciationUpdate,
+                meaning1Update,
+                meaning2Update,
+                meaning3Update,
+                synonymUpdate,
+                antonymsUpdate
               )
             }
             style={styles.buttonAdd}
           >
-            <Text style={{ color: "white", fontWeight: "bold" }}>Add Word</Text>
+            <Text style={{ color: "white", fontWeight: "bold" }}>Save</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -259,7 +313,7 @@ export default function AddScreen() {
                   return (
                     <TouchableOpacity
                       onPress={() =>
-                        handleGetPronunciation(item, tempPronunciation)
+                        handleGetPronunciation(item, tempPronunciationUpdate)
                       }
                       style={styles.pronunciationButton}
                       key={item}
@@ -275,7 +329,7 @@ export default function AddScreen() {
                   return (
                     <TouchableOpacity
                       onPress={() =>
-                        handleGetPronunciation(item, tempPronunciation)
+                        handleGetPronunciation(item, tempPronunciationUpdate)
                       }
                       style={styles.pronunciationButton}
                       key={item}
@@ -290,7 +344,7 @@ export default function AddScreen() {
                   return (
                     <TouchableOpacity
                       onPress={() =>
-                        handleGetPronunciation(item, tempPronunciation)
+                        handleGetPronunciation(item, tempPronunciationUpdate)
                       }
                       style={styles.pronunciationButton}
                       key={item}
@@ -305,7 +359,7 @@ export default function AddScreen() {
                   return (
                     <TouchableOpacity
                       onPress={() =>
-                        handleGetPronunciation(item, tempPronunciation)
+                        handleGetPronunciation(item, tempPronunciationUpdate)
                       }
                       style={styles.pronunciationButton}
                       key={item}
@@ -321,7 +375,7 @@ export default function AddScreen() {
                   return (
                     <TouchableOpacity
                       onPress={() =>
-                        handleGetPronunciation(item, tempPronunciation)
+                        handleGetPronunciation(item, tempPronunciationUpdate)
                       }
                       style={styles.pronunciationButton}
                       key={item}
@@ -352,6 +406,13 @@ export default function AddScreen() {
     </View>
   );
 }
+
+export interface UpdateScreenParams {
+  text: string;
+}
+
+export interface UpdateScreenProps
+  extends StackScreenProps<Record<string, UpdateScreenParams>> {}
 
 const styles = StyleSheet.create({
   container: {

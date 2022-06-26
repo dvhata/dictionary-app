@@ -75,14 +75,54 @@ class WordApi {
         console.log(error)})
   };
 
-  add = (word?: string, pronunciation?: string, meaning?:string) => {
-    const url = BASE_URL + "add/";
+  unlike = (word?: string) => {
+    const url = BASE_URL + "unlike/" + word;
+    console.log(url);
+    return axios
+      .put(
+        url, {
+          word
+        }
+      )
+      .then((response) => response.data)
+      .catch(function(error) {
+        console.log(error)})
+  };
+
+  add = (word?: string, pronunciation?: string, meaning?:string, synonym?: string, antonyms?: string) => {
+    const url = BASE_URL + "add";
     console.log(url);
     return axios
       .post(
         url, {
-          word, pronunciation, meaning
+          word, pronunciation, meaning, synonym, antonyms
         }
+      )
+      .then((response) => response.data)
+      .catch(function(error) {
+        console.log(error)})
+  };
+
+  update = (oldWord?: string, word?: string, pronunciation?: string, meaning?:string, synonym?: string, antonyms?: string) => {
+    const url = BASE_URL + "update/" + oldWord;
+    console.log(url);
+    return axios
+      .put(
+        url, {
+          word, pronunciation, meaning, synonym, antonyms
+        }
+      )
+      .then((response) => response.data)
+      .catch(function(error) {
+        console.log(error)})
+  };
+
+  delete = (word?: string) => {
+    const url = BASE_URL + "delete/" + word;
+    console.log(url);
+    return axios
+      .delete(
+        url
       )
       .then((response) => response.data)
       .catch(function(error) {

@@ -13,7 +13,7 @@ import {
 import wordApi from "../../Api/WordApi";
 import { Word } from "../../Models/Word/Word";
 import axios from "axios";
-const baseUrl = "192.168.0.111:3000/words/";
+import { Icon } from "react-native-elements";
 
 export default function SearchComponent(
   props: PropsWithChildren<SearchComponentProps>
@@ -24,14 +24,28 @@ export default function SearchComponent(
     <View>
       <FlatList
         style={styles.searchContainer}
-        data={textInput? wordSearchList : wordRecentList}
+        data={textInput ? wordSearchList : wordRecentList}
         renderItem={({ item }) => (
           <TouchableOpacity
             key={item.word}
             onPress={() => onPress(item.word as string)}
           >
             <View style={styles.wordListContainer}>
-              <Text style={styles.wordListWord}> {item.word} </Text>
+              <View style={{ flexDirection: "row" }}>
+                <Text style={styles.wordListWord}> {item.word}</Text>
+                <View style={{marginTop:-10}}>
+                  {item?.changeAble === 1 && (
+                    <Icon
+                      size={10}
+                      color="#9ACD32"
+                      raised
+                      name="user"
+                      type="font-awesome"
+                      tvParallaxProperties={undefined}
+                    />
+                  )}
+                </View>
+              </View>
               <Text> {item?.pronunciation?.slice(1, 20)} </Text>
               <Text> {item?.subMeaning?.slice(1, 50)} </Text>
             </View>

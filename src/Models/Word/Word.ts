@@ -3,5 +3,8 @@ export class Word {
     pronunciation?: string
     subMeaning?: string
     meaning?: string
-    favorite?: number = 0;
+    favorite?: number; 
+    changeAble?: number;
+    synonym?: string;
+    antonyms?: string;
 }

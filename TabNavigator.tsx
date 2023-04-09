@@ -22,8 +22,14 @@ export default function TabNavigator() {
       screenOptions={{
         tabBarShowLabel: false,
         headerShown: false,
-        tabBarStyle: { backgroundColor: "#414445", padding: 15, height: 70 },
-        tabBarActiveTintColor: "white",
+        tabBarStyle: {
+          backgroundColor: "#272C52",
+          paddingBottom: 15,
+          height: 80,
+          // border: 0,
+          // opacity: 0.8,
+        },
+        tabBarActiveTintColor: "#7CB9E8",
       }}
     >
       <Tab.Screen

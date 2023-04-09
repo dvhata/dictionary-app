@@ -70,6 +70,7 @@ export default function TransParagraphScreen() {
             fontSize: 25,
             fontWeight: "bold",
             textAlign: "center",
+            color: "white",
           }}
         >
           Translate paragraphs
@@ -163,7 +164,7 @@ export default function TransParagraphScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#ffe159",
+    backgroundColor: "#272C52",
     alignItems: "center",
   },
   transParagraphContainer: {
@@ -176,10 +177,11 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: "white",
     height: 100,
+    borderRadius: 6,
   },
   buttonTrans: {
     padding: 10,
-    backgroundColor: "#3c3f41",
+    backgroundColor: "#CFAB36",
     width: 100,
     borderRadius: 15,
     alignItems: "center",
@@ -192,5 +194,6 @@ const styles = StyleSheet.create({
     marginTop: 50,
     marginBottom: 50,
     backgroundColor: "white",
+    borderRadius: 6,
   },
 });

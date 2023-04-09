@@ -139,6 +139,7 @@ export default function AddScreen() {
           style={{
             fontSize: 20,
             fontWeight: "bold",
+            color: "white",
           }}
         >
           Add New Word
@@ -356,7 +357,7 @@ export default function AddScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8d84c",
+    backgroundColor: "#272C52",
     alignItems: "center",
   },
   transParagraphContainer: {
@@ -366,7 +367,7 @@ const styles = StyleSheet.create({
   },
   transParagraphTextInput: {
     backgroundColor: "white",
-    color: "black",
+    color: "white",
     height: 50,
     padding: 10,
     paddingLeft: 20,
@@ -378,11 +379,12 @@ const styles = StyleSheet.create({
     marginBottom: 5,
     fontWeight: "bold",
     fontSize: 16,
+    color: "white",
   },
   buttonAdd: {
     marginTop: 20,
     padding: 10,
-    backgroundColor: "#3c3f41",
+    backgroundColor: "#CFAB36",
     width: 100,
     borderRadius: 15,
     textAlign: "center",
@@ -421,7 +423,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   buttonOpen: {
-    backgroundColor: "#3c3f41",
+    backgroundColor: "#CFAB36",
   },
   buttonClose: {
     width: 100,

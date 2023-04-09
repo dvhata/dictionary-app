@@ -1,6 +1,8 @@
 import { StackScreenProps } from "@react-navigation/stack";
 import React, { PropsWithChildren } from "react";
 import { StyleSheet, Text, TextInput, View } from "react-native";
+import Ionicons from "react-native-vector-icons/Ionicons";
+// import { Icon } from "react-native-vector-icons/Icon";
 import wordApi from "../../Api/WordApi";
 import { Word } from "../../Models/Word/Word";
 import SearchComponent from "./SearchComponent";
@@ -36,7 +38,6 @@ export default function HomeScreen(props: PropsWithChildren<HomeViewProps>) {
         .recent()
         .then((response: any) => {
           setWordRecentList(response);
-
         })
         .catch((error) => {
           console.log("Api call error");
@@ -48,32 +49,48 @@ export default function HomeScreen(props: PropsWithChildren<HomeViewProps>) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.textHeader}>E-Dictionary</Text>
+        <Text style={styles.textSubHeader}>Eng-Viet</Text>
+      </View>
       <View style={styles.searchContainer}>
         <View>
-          <View style={styles.header}>
-            <Text style={styles.textHeader}>Smart Dictionary</Text>
-            <Text style={styles.textSubHeader}>Eng-Viet</Text>
-            <View>
-              <Text></Text>
+          <View style={styles.searchArea}>
+            <Text></Text>
+            <View
+              style={{
+                borderRadius: 10,
+                justifyContent: "center",
+                display: "flex",
+              }}
+            >
+              <Ionicons
+                size={20}
+                name="search"
+                color={"#CFAB36"}
+                style={styles.searchIcon}
+              />
+
               <TextInput
                 onChangeText={handleSearch}
-                placeholderTextColor="black"
+                placeholderTextColor="white"
                 placeholder="Search here..."
                 style={styles.textInput}
               />
-              {wordRecentList && wordSearchList && (
-                <SearchComponent
-                  textInput={wordSearch}
-                  wordSearchList={wordSearchList}
-                  wordRecentList={wordRecentList}
-                  onPress={handleGotoMeaning}
-                />
-              )}
             </View>
+            {wordRecentList && wordSearchList && (
+              <SearchComponent
+                textInput={wordSearch}
+                wordSearchList={wordSearchList}
+                wordRecentList={wordRecentList}
+                onPress={handleGotoMeaning}
+              />
+            )}
           </View>
         </View>
       </View>
     </View>
+    // </View>
   );
 }
 
@@ -82,7 +99,7 @@ export interface HomeViewProps extends StackScreenProps<any> {}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8d84c",
+    backgroundColor: "#272C52",
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",
@@ -98,27 +115,42 @@ const styles = StyleSheet.create({
   },
   header: {
     flex: 1,
-    backgroundColor: "#414445",
+    backgroundColor: "none",
     alignItems: "center",
     borderRadius: 15,
     padding: 20,
+    marginBottom: 50,
+    marginTop: 50,
   },
   textHeader: {
-    marginTop: 50,
-    fontSize: 25,
+    // top: "20px",
+    fontSize: 54,
     fontWeight: "bold",
-    color: "white",
-    
+    color: "#CFAB36",
   },
   textSubHeader: {
-    fontSize: 15,
+    marginTop: 10,
+    fontSize: 25,
     fontWeight: "bold",
-    color: "white",
+    color: "#CFAB36",
   },
   dropdown: {
     marginTop: 20,
     marginBottom: 30,
     backgroundColor: "#f9f9f9",
+  },
+  // searchSection: {
+  //   flex: 1,
+  //   flexDirection: "row",
+  //   justifyContent: "center",
+  //   alignItems: "center",
+  //   backgroundColor: "#fff",
+  // },
+  searchIcon: {
+    // padding: 10,
+    position: "absolute",
+    top: 39,
+    left: 10,
   },
   searchBox: {
     backgroundColor: "#f9f9f9",
@@ -126,10 +158,21 @@ const styles = StyleSheet.create({
     width: "1000",
   },
   textInput: {
-    backgroundColor: "white",
-    height: 50,
-    width: 240,
+    backgroundColor: "#CFAB36",
+    opacity: 0.4,
     padding: 10,
+    marginBottom: 333,
+    marginLeft: 40,
+    marginRight: 20,
+    marginTop: 30,
     fontSize: 14,
+  },
+  searchArea: {
+    backgroundColor: "none",
+    justifyContent: "center",
+    width: 390,
+    height: 504,
+    borderRadius: 8,
+    // boxShadow: "5px 5px 1px 1px midnightblue",
   },
 });

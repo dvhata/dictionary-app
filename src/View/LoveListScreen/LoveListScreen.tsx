@@ -13,7 +13,9 @@ import { Word } from "../../Models/Word/Word";
 import * as Speech from "expo-speech";
 import { StackScreenProps } from "@react-navigation/stack";
 
-export default function LoveListSreen(props: PropsWithChildren<LoveListScreenProps>) {
+export default function LoveListSreen(
+  props: PropsWithChildren<LoveListScreenProps>
+) {
   const { navigation } = props;
   const [wordLoveList, setWordLoveList] = React.useState<Word[]>();
   const [loveIconColor, setLoveIconColor] = React.useState<string>("");
@@ -38,8 +40,8 @@ export default function LoveListSreen(props: PropsWithChildren<LoveListScreenPro
   }, []);
 
   React.useEffect(() => {
-    return navigation.addListener('focus', async () => {
-      await wordApi.favorite().then((response: any) => {       
+    return navigation.addListener("focus", async () => {
+      await wordApi.favorite().then((response: any) => {
         setWordLoveList(response);
       });
     });
@@ -52,9 +54,10 @@ export default function LoveListSreen(props: PropsWithChildren<LoveListScreenPro
           marginTop: 80,
           fontSize: 20,
           fontWeight: "bold",
+          color: "white",
         }}
       >
-        Your words
+        Your favourite words
       </Text>
       <FlatList
         style={styles.searchContainer}
@@ -87,7 +90,9 @@ export default function LoveListSreen(props: PropsWithChildren<LoveListScreenPro
                       raised
                       name="heart"
                       type="font-awesome"
-                      onPress={() => handleAddToFavorite(item.favorite, item.word)}
+                      onPress={() =>
+                        handleAddToFavorite(item.favorite, item.word)
+                      }
                       tvParallaxProperties={undefined}
                     />
                   </View>
@@ -114,7 +119,7 @@ export interface LoveListScreenProps extends StackScreenProps<any> {}
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#f8d84c",
+    backgroundColor: "#272C52",
     alignItems: "center",
     justifyContent: "center",
     flexDirection: "column",

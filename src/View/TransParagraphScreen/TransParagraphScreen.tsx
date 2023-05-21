@@ -11,6 +11,7 @@ import DropDownPicker from "react-native-dropdown-picker";
 import transParagraphApi from "../../Api/TransParagraphApi";
 import * as Speech from "expo-speech";
 import { Icon } from "react-native-elements";
+import "./transParagraphScreen.css";
 
 export default function TransParagraphScreen() {
   const [textInput, setTextInput] = React.useState<string>();
@@ -86,7 +87,7 @@ export default function TransParagraphScreen() {
         </View>
 
         <View style={{ flexDirection: "row", zIndex: 100, marginTop: 30 }}>
-          <View style={{ width: "50%" }}>
+          <View style={{ width: "40%" }}>
             <DropDownPicker
               onSelectItem={handleSelectSourceLanguage}
               open={openSource}
@@ -96,9 +97,31 @@ export default function TransParagraphScreen() {
               setValue={setValueSource}
               setItems={setItems}
               maxHeight={120}
+              containerStyle={{
+                backgroundColor: "#CFAB36",
+              }}
+              labelStyle={{ color: "white" }}
+              listItemLabelStyle={{ color: "black" }}
+              showArrowIcon={false}
+              // style={{color: 'white'}}
             />
           </View>
-          <View style={{ width: "50%" }}>
+          <View
+            style={{
+              width: "20%",
+              marginTop: "10px !important",
+            }}
+          >
+            <Icon
+              size={20}
+              name="language"
+              type="font-awesome"
+              tvParallaxProperties={undefined}
+              color={"#CFAB36"}
+              style={{ marginTop: "10px" }}
+            />
+          </View>
+          <View style={{ width: "40%" }}>
             <DropDownPicker
               onSelectItem={handleSelectTargetLanguage}
               open={openTarget}
@@ -108,6 +131,12 @@ export default function TransParagraphScreen() {
               setValue={setValueTarget}
               setItems={setItems}
               maxHeight={120}
+              containerStyle={{
+                backgroundColor: "#CFAB36",
+              }}
+              labelStyle={{ color: "white" }}
+              listItemLabelStyle={{ color: "black" }}
+              showArrowIcon={false}
             />
           </View>
         </View>
@@ -195,5 +224,10 @@ const styles = StyleSheet.create({
     marginBottom: 50,
     backgroundColor: "white",
     borderRadius: 6,
+  },
+  trans: {
+    backgroundColor: "none",
+    padding: "10px auto 10px auto",
+    width: "20%",
   },
 });

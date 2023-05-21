@@ -19,7 +19,7 @@ const Tab = createBottomTabNavigator();
 export default function TabNavigator() {
   return (
     <Tab.Navigator
-      screenOptions={{
+      screenOptions={({ route }) => ({
         tabBarShowLabel: false,
         headerShown: false,
         tabBarStyle: {
@@ -29,8 +29,9 @@ export default function TabNavigator() {
           // border: 0,
           // opacity: 0.8,
         },
-        tabBarActiveTintColor: "#7CB9E8",
-      }}
+        tabBarActiveTintColor:
+          route.name === "LoveListStory" ? "pink" : "#7CB9E8",
+      })}
     >
       <Tab.Screen
         name="HomeView"
